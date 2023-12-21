@@ -1,0 +1,7 @@
+{
+    "name": "My website",
+    "icons": [
+        { "src": "/solar-webway-192x192.png", "type": "image/png", "sizes": "192x192" },
+        { "src": "/solar-webway-5512x512.png", "type": "image/png", "sizes": "512x512" }
+    ]
+}
