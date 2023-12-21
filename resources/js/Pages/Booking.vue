@@ -1,6 +1,6 @@
 <script setup>
 import { Head, Link } from '@inertiajs/vue3';
-import TravelBooking from '@/Components/TravelBooking.vue';
+import BookingSystem from '@/Components/BookingSystem.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 </script>
 
@@ -10,7 +10,7 @@ import AppLayout from '@/Layouts/AppLayout.vue';
     <template v-if="$page.props.auth.user">
         <AppLayout>
             <div class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-darker bg-center bg-gray-100 dark:bg-dots-lighter dark:bg-gray-900 selection:bg-green-700 selection:text-white">
-                <TravelBooking/>
+                <BookingSystem/>
             </div>
         </AppLayout>
     </template>
@@ -35,7 +35,7 @@ import AppLayout from '@/Layouts/AppLayout.vue';
                     </Link>
                 </template>
             </div>
-            <TravelBooking/>
+            <BookingSystem/>
         </div>
     </template>
 </template>
