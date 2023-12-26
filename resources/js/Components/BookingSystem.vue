@@ -49,7 +49,7 @@ const planetImages     = {
     uranus:  uranusImg,
     neptune: neptuneImg,
 };
-const logos = [
+const logos            = [
     logo1,
     logo2,
     logo3,
@@ -57,6 +57,22 @@ const logos = [
     logo5,
     logo6,
     logo7,
+    logo8,
+    logo9,
+    logo10,
+    logo11,
+    logo12,
+    logo13,
+    logo14,
+    logo15,
+    logo16,
+    logo17,
+    logo18,
+    logo19,
+    logo20,
+    logo21,
+    logo22,
+    logo23,
 ];
 const cardTitles       = [
     'The best trip of your life',
