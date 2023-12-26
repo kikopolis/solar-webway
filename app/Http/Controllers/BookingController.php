@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Exceptions\CompanyNotFoundException;
 use App\Exceptions\PriceListExpiredException;
 use App\Http\Requests\SaveBookingRequest;
+use App\Http\Resources\BookingResource;
+use App\Models\Booking;
 use App\Service\BookingService;
 use Illuminate\Http\JsonResponse;
 
@@ -20,5 +22,10 @@ class BookingController extends Controller {
             abort(500, $e->getMessage());
         }
         return response()->json(['booking_uuid' => $booking->uuid]);
+    }
+    
+    public function all(): JsonResponse {
+        $bookings = Booking::orderBy('created_at', 'desc')->get();
+        return response()->json(BookingResource::collection($bookings));
     }
 }

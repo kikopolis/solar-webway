@@ -20,10 +20,11 @@ use Inertia\Response;
 |
 */
 Route::get('/', fn() => Inertia::render('Welcome'))->name('welcome');
-Route::get('/booking', fn() => Inertia::render('Booking'))->name('booking');
+Route::get('/book', fn() => Inertia::render('Booking'))->name('book');
 Route::get('/planets', fn() => PlanetResource::collection(Planet::all()))->name('planets');
 Route::get('/price-lists', fn() => PriceList::getLatestAsResource())->name('price-lists');
 Route::get('/routes/{from_uuid}/{to_uuid}', [TravelRouteController::class, 'getTravelRoutesBetweenPlanets'])->name('routes');
+Route::get('/get-bookings', [BookingController::class, 'all'])->name('bookings.view');
 Route::post('/bookings', [BookingController::class, 'bookNewTravelRoute'])->name('bookings.add');
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
     Route::get('/dashboard', fn(): Response => Inertia::render('Dashboard'))->name('dashboard');
