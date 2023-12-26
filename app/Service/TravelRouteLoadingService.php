@@ -18,9 +18,9 @@ class TravelRouteLoadingService {
     
     public function loadTravelRoutes(): void {
         $response = Http::get(self::API_URL)->body();
+        Log::info('Travel routes pulled', ['response' => $response]);
         try {
             $result = json_decode($response, true, 512, JSON_THROW_ON_ERROR);
-            Log::info('Travel routes pulled', ['result' => $result]);
             $price_list = $this->savePriceList($result['id'], $result['validUntil']);
             $this->saveLegs($result['legs'], $price_list);
         } catch (JsonException $e) {

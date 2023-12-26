@@ -15,8 +15,8 @@ class PullTravelRoutes extends Command {
     }
     
     public function handle(): void {
-        $latest_price_list = PriceList::latest('valid_until')->firstOrFail();
-        if ($latest_price_list->isExpired()) {
+        $latest_price_list = PriceList::latest('valid_until')->first();
+        if (!$latest_price_list || $latest_price_list->isExpired()) {
             $this->info('Pulling travel routes...');
             $this->travelRouteLoadingService->loadTravelRoutes();
             $this->info('Travel routes pulled.');
