@@ -9,7 +9,7 @@ return new class extends Migration {
         Schema::create('legs', function (Blueprint $table) {
             $table->id();
             $table->uuid()->unique();
-            $table->foreignId('price_list_id')->constrained();
+            $table->foreignId('price_list_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }

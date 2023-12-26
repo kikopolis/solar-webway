@@ -12,7 +12,7 @@ return new class extends Migration {
         Schema::create('price_lists', function (Blueprint $table) {
             $table->id();
             $table->uuid()->unique();
-            $table->timestampTz('valid_until');
+            $table->dateTime('valid_until');
             $table->timestamps();
         });
     }

@@ -12,11 +12,11 @@ return new class extends Migration
         Schema::create('providers', function (Blueprint $table) {
             $table->id();
             $table->uuid()->unique();
-            $table->string('price');
-            $table->dateTimeTz('flight_start');
-            $table->dateTimeTz('flight_end');
-            $table->foreignId('company_id')->constrained();
-            $table->foreignId('leg_id')->constrained();
+            $table->text('price');
+            $table->dateTime('flight_start');
+            $table->dateTime('flight_end');
+            $table->foreignId('company_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('leg_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }

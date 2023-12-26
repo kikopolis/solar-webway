@@ -12,7 +12,7 @@ return new class extends Migration {
             $table->foreignId('from_id')->constrained()->references('id')->on('planets');
             $table->foreignId('to_id')->constrained()->references('id')->on('planets');
             $table->string('distance');
-            $table->foreignId('leg_id')->constrained();
+            $table->foreignId('leg_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }

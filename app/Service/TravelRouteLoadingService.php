@@ -6,8 +6,8 @@ use App\Models\Company;
 use App\Models\Leg;
 use App\Models\Planet;
 use App\Models\PriceList;
-use App\Models\RouteInfo;
 use App\Models\Provider;
+use App\Models\RouteInfo;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use JsonException;
@@ -20,27 +20,35 @@ class TravelRouteLoadingService {
         $response = Http::get(self::API_URL)->body();
         try {
             $result = json_decode($response, true, 512, JSON_THROW_ON_ERROR);
-            $priceList = $this->savePriceList($result['id'], $result['validUntil']);
-            $this->saveLegs($result['legs'], $priceList);
+            $price_list = $this->savePriceList($result['id'], $result['validUntil']);
+            $this->saveLegs($result['legs'], $price_list);
         } catch (JsonException $e) {
             Log::error($e->getMessage());
             throw new RunTimeException('Error while parsing travel routes');
         }
+        $this->purgeOldTravelRoutes();
+    }
+    
+    public function purgeOldTravelRoutes(): void {
+        $price_lists = PriceList::orderBy('valid_until', 'desc')->limit(25)->skip(15)->get();
+        foreach ($price_lists as $price_list) {
+            $price_list->delete();
+        }
     }
     
     private function savePriceList(string $uuid, string $validUntil): PriceList {
-        $priceList = PriceList::where('uuid', $uuid)->first();
-        if ($priceList === null) {
-            $priceList = PriceList::create(['uuid' => $uuid, 'valid_until' => $validUntil]);
+        $price_list = PriceList::where('uuid', $uuid)->first();
+        if ($price_list === null) {
+            $price_list = PriceList::create(['uuid' => $uuid, 'valid_until' => $validUntil]);
         }
-        return $priceList;
+        return $price_list;
     }
     
     private function saveLegs(mixed $travelLegs, PriceList $priceList): void {
-        foreach ($travelLegs as $travelLeg) {
-            $leg = $this->saveLeg($travelLeg['id'], $priceList);
-            $this->saveRouteInfo($travelLeg['routeInfo'], $leg);
-            $this->saveProviders($travelLeg['providers'], $leg);
+        foreach ($travelLegs as $travel_leg) {
+            $leg = $this->saveLeg($travel_leg['id'], $priceList);
+            $this->saveRouteInfo($travel_leg['routeInfo'], $leg);
+            $this->saveProviders($travel_leg['providers'], $leg);
         }
     }
     
@@ -57,7 +65,7 @@ class TravelRouteLoadingService {
         if ($info === null) {
             $from = $this->savePlanet($data['from']);
             $to = $this->savePlanet($data['to']);
-            $info = RouteInfo::create(
+            RouteInfo::create(
                 [
                     'uuid'     => $data['id'],
                     'from_id'  => $from->id,
@@ -103,7 +111,9 @@ class TravelRouteLoadingService {
     }
     
     private function saveCompany(array $data) {
-        $company = Company::where('uuid', $data['id'])->first();
+        $company = Company::where('uuid', $data['id'])
+                          ->orWhere('name', $data['name'])
+                          ->first();
         if ($company === null) {
             $company = Company::create(['uuid' => $data['id'], 'name' => $data['name']]);
         }
